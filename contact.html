@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — LUMIÈRE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --cream: #F5F0E8; --warm-white: #FDFAF5; --gold: #C9A96E; --gold-light: #E8D5B0; --dark: #1A1510; --charcoal: #2D2820; --muted: #8C7E6E; --accent: #7A5C3E; --success: #5B8A68; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Jost', sans-serif; background: var(--warm-white); color: var(--dark); }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 4rem; background: rgba(253,250,245,0.96); border-bottom: 1px solid rgba(201,169,110,0.2); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; letter-spacing: 0.2em; color: var(--dark); text-decoration: none; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a { font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--charcoal); text-decoration: none; transition: color 0.3s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-actions { display: flex; gap: 1.2rem; align-items: center; }
+  .nav-actions a { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: var(--charcoal); }
+  .btn-nav { background: var(--dark); color: var(--cream) !important; padding: 0.6rem 1.5rem; }
+  .btn-nav:hover { background: var(--gold) !important; color: var(--dark) !important; }
+
+  .page-hero { margin-top: 80px; background: url('https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=1600') center/cover; height: 300px; position: relative; display: flex; align-items: center; justify-content: center; }
+  .page-hero::before { content: ''; position: absolute; inset: 0; background: rgba(26,21,16,0.6); }
+  .page-hero-content { position: relative; z-index: 2; text-align: center; }
+  .page-hero-content h1 { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 300; color: var(--cream); }
+  .page-hero-content h1 em { font-style: italic; color: var(--gold); }
+  .page-hero-content p { font-size: 0.85rem; color: var(--gold-light); margin-top: 0.8rem; }
+
+  .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; }
+  .contact-info { padding: 5rem 4rem; background: var(--cream); }
+  .contact-info h2 { font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; font-weight: 300; margin-bottom: 1rem; }
+  .contact-info h2 em { font-style: italic; color: var(--gold); }
+  .contact-info > p { font-size: 0.88rem; line-height: 1.9; color: var(--muted); margin-bottom: 3rem; }
+  .contact-detail { display: flex; gap: 1.2rem; align-items: flex-start; margin-bottom: 2rem; }
+  .contact-icon { width: 44px; height: 44px; border: 1px solid rgba(201,169,110,0.4); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .detail-label { font-size: 0.62rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.3rem; }
+  .detail-val { font-size: 0.88rem; color: var(--dark); line-height: 1.6; }
+  .hours-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(201,169,110,0.2); }
+  .hours-title { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; }
+  .hours-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(201,169,110,0.1); }
+  .hours-row span:first-child { color: var(--muted); }
+
+  .contact-form { padding: 5rem 4rem; background: var(--warm-white); }
+  .contact-form h2 { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 300; margin-bottom: 0.5rem; }
+  .contact-form .subtitle { font-size: 0.82rem; color: var(--muted); margin-bottom: 2.5rem; }
+  .form-group { margin-bottom: 1.5rem; }
+  .form-group label { display: block; font-size: 0.62rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.5rem; }
+  .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.85rem 1rem; border: 1px solid rgba(201,169,110,0.3); background: var(--cream); color: var(--dark); font-family: 'Jost', sans-serif; font-size: 0.85rem; outline: none; transition: border-color 0.3s; resize: none; }
+  .form-group input:focus, .form-group textarea:focus { border-color: var(--gold); }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .submit-btn { width: 100%; padding: 1rem; background: var(--dark); border: none; color: var(--cream); font-family: 'Jost', sans-serif; font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; transition: background 0.3s; }
+  .submit-btn:hover { background: var(--gold); color: var(--dark); }
+
+  footer { background: var(--charcoal); padding: 2rem 4rem; }
+  .footer-bottom { display: flex; justify-content: space-between; }
+  .footer-bottom p { font-size: 0.72rem; color: var(--muted); }
+  .footer-links a { font-size: 0.72rem; color: var(--muted); text-decoration: none; margin-left: 1.5rem; }
+  .footer-links a:hover { color: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">LUMIÈRE<span>.</span></a>
+  <div class="nav-links">
+    <a href="shop.html">Shop</a>
+    <a href="collections.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html" class="active">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a href="account.html">Account</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="account.html" class="btn-nav">Sign In</a>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-content">
+    <h1>Get in <em>Touch</em></h1>
+    <p>We'd love to hear from you. Let's create something beautiful together.</p>
+  </div>
+</div>
+
+<div class="contact-wrap">
+  <div class="contact-info">
+    <h2>Let's Start a <em>Conversation</em></h2>
+    <p>Whether you're looking for the perfect piece, planning a full home transformation, or need design inspiration — our team is here to guide you.</p>
+    <div class="contact-detail">
+      <div class="contact-icon">📍</div>
+      <div><div class="detail-label">Studio</div><div class="detail-val">42, Design Avenue, Bandra West<br>Mumbai — 400050, Maharashtra</div></div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-icon">📞</div>
+      <div><div class="detail-label">Phone</div><div class="detail-val">+91 22 4567 8900<br>+91 98765 43210 (WhatsApp)</div></div>
+    </div>
+    <div class="contact-detail">
+      <div class="contact-icon">✉</div>
+      <div><div class="detail-label">Email</div><div class="detail-val">hello@lumiere.in<br>orders@lumiere.in</div></div>
+    </div>
+    <div class="hours-section">
+      <div class="hours-title">Studio Hours</div>
+      <div class="hours-row"><span>Monday – Friday</span><span>10:00 AM – 7:00 PM</span></div>
+      <div class="hours-row"><span>Saturday</span><span>11:00 AM – 6:00 PM</span></div>
+      <div class="hours-row"><span>Sunday</span><span>By appointment only</span></div>
+    </div>
+  </div>
+
+  <div class="contact-form">
+    <h2>Send us a Message</h2>
+    <p class="subtitle">We typically respond within 24 hours.</p>
+    <form action="thankyou.html" method="get">
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" name="first" placeholder="Priya" required></div>
+        <div class="form-group"><label>Last Name</label><input type="text" name="last" placeholder="Sharma" required></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" name="email" placeholder="you@example.com" required></div>
+      <div class="form-group"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="+91 98765 43210"></div>
+      <div class="form-group">
+        <label>Subject</label>
+        <select name="subject">
+          <option>General Enquiry</option>
+          <option>Design Consultation</option>
+          <option>Order Support</option>
+          <option>Product Information</option>
+          <option>Press / Media</option>
+          <option>Partnership</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Message</label><textarea name="message" rows="5" placeholder="Tell us about your project, home, or any questions you have…" required></textarea></div>
+      <button type="submit" class="submit-btn">Send Message</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025 LUMIÈRE Interior Design. All rights reserved.</p>
+    <div class="footer-links"><a href="index.html">Home</a><a href="shop.html">Shop</a><a href="about.html">About</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
