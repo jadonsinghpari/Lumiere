@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — LUMIÈRE</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --cream: #F5F0E8; --warm-white: #FDFAF5; --gold: #C9A96E; --gold-light: #E8D5B0; --dark: #1A1510; --charcoal: #2D2820; --muted: #8C7E6E; --accent: #7A5C3E; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Jost', sans-serif; background: var(--warm-white); color: var(--dark); }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 1.5rem 4rem; background: rgba(253,250,245,0.96); border-bottom: 1px solid rgba(201,169,110,0.2); }
+  .nav-logo { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; letter-spacing: 0.2em; color: var(--dark); text-decoration: none; }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2.5rem; }
+  .nav-links a { font-size: 0.75rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--charcoal); text-decoration: none; transition: color 0.3s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+  .nav-actions { display: flex; gap: 1.2rem; align-items: center; }
+  .nav-actions a { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; color: var(--charcoal); }
+  .btn-nav { background: var(--dark); color: var(--cream) !important; padding: 0.6rem 1.5rem; }
+  .btn-nav:hover { background: var(--gold) !important; color: var(--dark) !important; }
+
+  .page-header { margin-top: 80px; padding: 4rem 4rem 2.5rem; background: var(--cream); display: flex; align-items: flex-end; justify-content: space-between; }
+  .breadcrumb { font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.8rem; }
+  .breadcrumb a { color: var(--muted); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--gold); }
+  .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; font-weight: 300; }
+  .page-header h1 em { font-style: italic; color: var(--gold); }
+
+  /* CSS-ONLY FILTER TABS using radio inputs */
+  .filter-tabs-wrap { background: var(--cream); padding: 0 4rem 2rem; border-bottom: 1px solid rgba(201,169,110,0.2); }
+  .filter-tabs-wrap input[type="radio"] { display: none; }
+  .filter-tabs { display: flex; gap: 0; flex-wrap: wrap; }
+  .filter-tab-label { padding: 0.65rem 1.5rem; font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s; }
+  .filter-tab-label:hover { color: var(--dark); }
+  #tab-all:checked ~ .filter-tabs label[for="tab-all"],
+  #tab-living:checked ~ .filter-tabs label[for="tab-living"],
+  #tab-bedroom:checked ~ .filter-tabs label[for="tab-bedroom"],
+  #tab-dining:checked ~ .filter-tabs label[for="tab-dining"],
+  #tab-lighting:checked ~ .filter-tabs label[for="tab-lighting"],
+  #tab-decor:checked ~ .filter-tabs label[for="tab-decor"] { color: var(--dark); border-bottom-color: var(--gold); }
+
+  /* Product panels */
+  .prod-panel { display: none; }
+  #tab-all:checked ~ .prod-panel.panel-all,
+  #tab-living:checked ~ .prod-panel.panel-living,
+  #tab-bedroom:checked ~ .prod-panel.panel-bedroom,
+  #tab-dining:checked ~ .prod-panel.panel-dining,
+  #tab-lighting:checked ~ .prod-panel.panel-lighting,
+  #tab-decor:checked ~ .prod-panel.panel-decor { display: block; }
+
+  .shop-wrap { display: flex; gap: 0; }
+  .filters { width: 250px; min-width: 250px; padding: 2.5rem 2rem; border-right: 1px solid rgba(201,169,110,0.2); background: var(--warm-white); position: sticky; top: 80px; height: calc(100vh - 80px); overflow-y: auto; }
+  .filter-group { margin-bottom: 2.5rem; }
+  .filter-title { font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.2rem; display: block; }
+  .filter-option { display: flex; align-items: center; gap: 0.7rem; margin-bottom: 0.7rem; }
+  .filter-option input[type="checkbox"] { accent-color: var(--gold); width: 14px; height: 14px; }
+  .filter-option label { font-size: 0.82rem; color: var(--charcoal); cursor: pointer; }
+  .filter-option span { margin-left: auto; font-size: 0.68rem; color: var(--muted); }
+  .filter-divider { height: 1px; background: rgba(201,169,110,0.2); margin: 1rem 0; }
+  .price-inputs { display: flex; gap: 0.5rem; }
+  .price-inputs input { flex: 1; padding: 0.5rem 0.7rem; border: 1px solid rgba(201,169,110,0.3); background: var(--cream); color: var(--dark); font-family: 'Jost', sans-serif; font-size: 0.78rem; outline: none; }
+  .filter-btn { width: 100%; padding: 0.8rem; background: var(--dark); color: var(--cream); border: none; font-family: 'Jost', sans-serif; font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; cursor: pointer; margin-top: 0.5rem; transition: background 0.3s; }
+  .filter-btn:hover { background: var(--gold); color: var(--dark); }
+
+  .shop-main { flex: 1; padding: 3rem; }
+  .shop-toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(201,169,110,0.2); }
+  .result-count { font-size: 0.78rem; color: var(--muted); }
+
+  .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .prod-card { text-decoration: none; color: inherit; display: block; }
+  .prod-img { position: relative; overflow: hidden; margin-bottom: 1.2rem; background: var(--cream); }
+  .prod-img img { width: 100%; aspect-ratio: 1/1; object-fit: cover; transition: transform 0.5s; display: block; }
+  .prod-card:hover .prod-img img { transform: scale(1.06); }
+  .prod-badge { position: absolute; top: 1rem; left: 1rem; background: var(--gold); color: var(--dark); font-size: 0.55rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 0.3rem 0.7rem; }
+  .prod-badge.new-b { background: var(--dark); color: var(--cream); }
+  .prod-hover { position: absolute; bottom: 0; left: 0; right: 0; background: var(--dark); color: var(--cream); text-align: center; padding: 0.75rem; font-size: 0.62rem; letter-spacing: 0.18em; text-transform: uppercase; transform: translateY(100%); transition: transform 0.3s ease; }
+  .prod-card:hover .prod-hover { transform: translateY(0); }
+  .prod-rating { font-size: 0.72rem; color: var(--gold); margin-bottom: 0.4rem; }
+  .prod-rating span { color: var(--muted); margin-left: 0.3rem; }
+  .prod-name { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; margin-bottom: 0.25rem; }
+  .prod-sub { font-size: 0.68rem; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.6rem; text-transform: uppercase; }
+  .prod-price { font-size: 0.9rem; color: var(--accent); }
+  .prod-price del { color: var(--muted); font-weight: 300; margin-right: 0.4rem; }
+
+  .pagination { display: flex; gap: 0.5rem; justify-content: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(201,169,110,0.2); }
+  .page-btn { width: 40px; height: 40px; border: 1px solid rgba(201,169,110,0.3); background: transparent; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: var(--charcoal); text-decoration: none; transition: all 0.3s; }
+  .page-btn:hover, .page-btn.active { background: var(--dark); color: var(--cream); border-color: var(--dark); }
+
+  footer { background: var(--charcoal); padding: 2.5rem 4rem; }
+  .footer-bottom { display: flex; justify-content: space-between; }
+  .footer-bottom p { font-size: 0.72rem; color: var(--muted); }
+  .footer-links a { font-size: 0.72rem; color: var(--muted); text-decoration: none; margin-left: 1.5rem; }
+  .footer-links a:hover { color: var(--gold-light); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">LUMIÈRE<span>.</span></a>
+  <div class="nav-links">
+    <a href="shop.html" class="active">Shop</a>
+    <a href="collections.html">Collections</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+  </div>
+  <div class="nav-actions">
+    <a href="account.html">Account</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="account.html" class="btn-nav">Sign In</a>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div>
+    <div class="breadcrumb"><a href="index.html">Home</a> / Shop</div>
+    <h1>Our <em>Collection</em></h1>
+  </div>
+  <div style="font-size:0.78rem;color:var(--muted)">245 pieces curated for you</div>
+</div>
+
+<!-- CSS-only category filter tabs -->
+<div class="filter-tabs-wrap">
+  <input type="radio" name="shop-tab" id="tab-all" checked>
+  <input type="radio" name="shop-tab" id="tab-living">
+  <input type="radio" name="shop-tab" id="tab-bedroom">
+  <input type="radio" name="shop-tab" id="tab-dining">
+  <input type="radio" name="shop-tab" id="tab-lighting">
+  <input type="radio" name="shop-tab" id="tab-decor">
+  <div class="filter-tabs">
+    <label class="filter-tab-label" for="tab-all">All</label>
+    <label class="filter-tab-label" for="tab-living">Living Room</label>
+    <label class="filter-tab-label" for="tab-bedroom">Bedroom</label>
+    <label class="filter-tab-label" for="tab-dining">Dining</label>
+    <label class="filter-tab-label" for="tab-lighting">Lighting</label>
+    <label class="filter-tab-label" for="tab-decor">Décor</label>
+  </div>
+
+  <!-- ALL PRODUCTS -->
+  <div class="prod-panel panel-all">
+    <div class="shop-wrap">
+      <aside class="filters">
+        <div class="filter-group">
+          <span class="filter-title">Price Range (₹)</span>
+          <div class="price-inputs">
+            <input type="number" placeholder="Min" value="0">
+            <input type="number" placeholder="Max" value="500000">
+          </div>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-group">
+          <span class="filter-title">Material</span>
+          <label class="filter-option"><input type="checkbox"><label>Solid Wood</label></label>
+          <label class="filter-option"><input type="checkbox"><label>Marble</label></label>
+          <label class="filter-option"><input type="checkbox"><label>Velvet</label></label>
+          <label class="filter-option"><input type="checkbox"><label>Leather</label></label>
+          <label class="filter-option"><input type="checkbox"><label>Metal</label></label>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-group">
+          <span class="filter-title">Style</span>
+          <label class="filter-option"><input type="checkbox"><label>Contemporary</label></label>
+          <label class="filter-option"><input type="checkbox"><label>Art Deco</label></label>
+          <label class="filter-option"><input type="checkbox"><label>Minimalist</label></label>
+          <label class="filter-option"><input type="checkbox"><label>Heritage</label></label>
+        </div>
+        <a href="cart.html" class="filter-btn" style="display:block;text-align:center;text-decoration:none;">Apply Filters</a>
+      </aside>
+      <main class="shop-main">
+        <div class="shop-toolbar">
+          <span class="result-count">Showing 12 of 245 products</span>
+        </div>
+        <div class="prod-grid">
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500" alt="Venetian Sofa"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(34)</span></div><div class="prod-name">Venetian Velvet Sofa</div><div class="prod-sub">Living Room</div><div class="prod-price"><del>₹1,10,000</del> ₹89,500</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=500" alt="Marble Table"><span class="prod-badge new-b">New</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(12)</span></div><div class="prod-name">Calacatta Marble Table</div><div class="prod-sub">Dining Room</div><div class="prod-price">₹1,45,000</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=500" alt="Armchair"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(67)</span></div><div class="prod-name">Azure Velvet Armchair</div><div class="prod-sub">Living Room</div><div class="prod-price"><del>₹42,000</del> ₹34,000</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1513506003901-1e6a35f8a4a1?w=500" alt="Pendant"><span class="prod-badge new-b">New</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★☆<span>(23)</span></div><div class="prod-name">Geometric Brass Pendant</div><div class="prod-sub">Lighting</div><div class="prod-price">₹18,500</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=500" alt="Bed"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(18)</span></div><div class="prod-name">Florence King Bed Frame</div><div class="prod-sub">Bedroom</div><div class="prod-price"><del>₹1,55,000</del> ₹1,25,000</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1584447128309-b66b7a4d1b57?w=500" alt="Rug"><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★☆<span>(41)</span></div><div class="prod-name">Moroccan Wool Rug</div><div class="prod-sub">Rugs & Textiles</div><div class="prod-price">₹28,000</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1499933374294-4584851b3f7e?w=500" alt="Side Table"><span class="prod-badge new-b">New</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(8)</span></div><div class="prod-name">Onyx Side Table</div><div class="prod-sub">Living Room</div><div class="prod-price">₹42,000</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1513506003901-1e6a35f8a4a1?w=500" alt="Chandelier"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(15)</span></div><div class="prod-name">Crystal Chandelier</div><div class="prod-sub">Lighting</div><div class="prod-price"><del>₹1,20,000</del> ₹95,000</div></a>
+          <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=500" alt="Coffee Table"><span class="prod-badge new-b">New</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(6)</span></div><div class="prod-name">Travertine Coffee Table</div><div class="prod-sub">Living Room</div><div class="prod-price">₹78,000</div></a>
+        </div>
+        <div class="pagination">
+          <a href="#" class="page-btn active">1</a>
+          <a href="#" class="page-btn">2</a>
+          <a href="#" class="page-btn">3</a>
+          <a href="#" class="page-btn">→</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- LIVING ROOM -->
+  <div class="prod-panel panel-living">
+    <div class="shop-main" style="padding:3rem 4rem;">
+      <div class="prod-grid">
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=500" alt="Sofa"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(34)</span></div><div class="prod-name">Venetian Velvet Sofa</div><div class="prod-sub">Living Room</div><div class="prod-price"><del>₹1,10,000</del> ₹89,500</div></a>
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=500" alt="Armchair"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(67)</span></div><div class="prod-name">Azure Velvet Armchair</div><div class="prod-sub">Living Room</div><div class="prod-price"><del>₹42,000</del> ₹34,000</div></a>
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1499933374294-4584851b3f7e?w=500" alt="Side Table"><span class="prod-badge new-b">New</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(8)</span></div><div class="prod-name">Onyx Side Table</div><div class="prod-sub">Living Room</div><div class="prod-price">₹42,000</div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- BEDROOM -->
+  <div class="prod-panel panel-bedroom">
+    <div class="shop-main" style="padding:3rem 4rem;">
+      <div class="prod-grid">
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=500" alt="Bed"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(18)</span></div><div class="prod-name">Florence King Bed Frame</div><div class="prod-sub">Bedroom</div><div class="prod-price"><del>₹1,55,000</del> ₹1,25,000</div></a>
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?w=500" alt="Dresser"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(22)</span></div><div class="prod-name">Cerused Oak Dresser</div><div class="prod-sub">Bedroom</div><div class="prod-price"><del>₹1,05,000</del> ₹88,000</div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DINING -->
+  <div class="prod-panel panel-dining">
+    <div class="shop-main" style="padding:3rem 4rem;">
+      <div class="prod-grid">
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1617806118233-18e1de247200?w=500" alt="Marble Table"><span class="prod-badge new-b">New</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(12)</span></div><div class="prod-name">Calacatta Marble Table</div><div class="prod-sub">Dining Room</div><div class="prod-price">₹1,45,000</div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTING -->
+  <div class="prod-panel panel-lighting">
+    <div class="shop-main" style="padding:3rem 4rem;">
+      <div class="prod-grid">
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1513506003901-1e6a35f8a4a1?w=500" alt="Pendant"><span class="prod-badge new-b">New</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★☆<span>(23)</span></div><div class="prod-name">Geometric Brass Pendant</div><div class="prod-sub">Lighting</div><div class="prod-price">₹18,500</div></a>
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1513506003901-1e6a35f8a4a1?w=500" alt="Chandelier"><span class="prod-badge">Sale</span><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★★<span>(15)</span></div><div class="prod-name">Crystal Chandelier</div><div class="prod-sub">Lighting</div><div class="prod-price"><del>₹1,20,000</del> ₹95,000</div></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DECOR -->
+  <div class="prod-panel panel-decor">
+    <div class="shop-main" style="padding:3rem 4rem;">
+      <div class="prod-grid">
+        <a href="cart.html" class="prod-card"><div class="prod-img"><img src="https://images.unsplash.com/photo-1584447128309-b66b7a4d1b57?w=500" alt="Rug"><div class="prod-hover">Add to Cart</div></div><div class="prod-rating">★★★★☆<span>(41)</span></div><div class="prod-name">Moroccan Wool Rug</div><div class="prod-sub">Rugs & Textiles</div><div class="prod-price">₹28,000</div></a>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end filter-tabs-wrap -->
+
+<footer>
+  <div class="footer-bottom">
+    <p>© 2025 LUMIÈRE Interior Design. All rights reserved.</p>
+    <div class="footer-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+  </div>
+</footer>
+
+</body>
+</html>
